@@ -13,7 +13,7 @@ casa.yaml  ──►  tools/generar_sh3d.py  ──►  salida/casa_purisima.sh3
                                        └─►  salida/superficies.md       (m² de cada estancia)
 ```
 
-1. **`casa.yaml`** es el único fichero que se edita. Define la parcela (datos del catastro), el edificio, las plantas, los huecos de fachada, los tabiques, las estancias y la escalera, todo en metros.
+1. **`casa.yaml`** es el único fichero que se edita. Define la parcela (datos del catastro), el edificio, las plantas, los huecos de fachada, los tabiques, los obstáculos (chimenea, pilares), las estancias y la escalera, todo en metros.
 2. **`tools/generar_sh3d.py`** lo convierte en un `.sh3d` (un ZIP con `Home.xml`, el formato XML de Sweet Home 3D).
 3. Abres `salida/casa_purisima.sh3d` en Sweet Home 3D y lo ves en 2D y 3D.
 

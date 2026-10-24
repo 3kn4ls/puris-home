@@ -40,7 +40,7 @@ plantas:
       - {nombre: Ventanuco,        muro: fachada, x: 1.45, ancho: 0.40, alto: 0.45, elevacion: 1.00, tipo: ventana}
       - {nombre: Portón izquierdo, muro: fachada, x: 3.45, ancho: 2.00, alto: 2.60, elevacion: 0.00, tipo: puerta}
       - {nombre: Portón cochera,   muro: fachada, x: 8.40, ancho: 2.45, alto: 2.80, elevacion: 0.00, tipo: puerta}
-      - {nombre: Puerta al patio,  muro: fondo,   x: 5.40, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
+      - {nombre: Puerta al patio,  muro: fondo,   x: 4.80, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
     tabiques:             # muros interiores: [x1, y1] -> [x2, y2]
       - {nombre: Muro central existente, desde: [6.50, 0.40], hasta: [6.50, fondo-0.40], grosor: 0.30}
     # Estancias: rectángulos (x, y = esquina más cercana a fachada-izquierda).
@@ -50,6 +50,8 @@ plantas:
     estancias:
       - {nombre: Zona izquierda (entrada), x: 0.40, y: 0.40, ancho: 5.95, fondo: fondo-0.80}
       - {nombre: Cochera,                  x: 6.65, y: 0.40, ancho: ancho,  fondo: fondo-0.80}
+    obstaculos:           # elementos macizos que restan superficie (chimeneas, pilares...)
+      - {nombre: Chimenea, x: 0.40, y: fondo-2.20, ancho: 0.45, fondo: 1.80}   # aprox, marcada por Edu
     escalera:             # tramo recto en el lado de la cochera, sube hacia el fondo
       {x: 6.65, y: fondo/2, ancho: 1.00, largo: fondo/2-0.40}
 

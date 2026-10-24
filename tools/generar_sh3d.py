@@ -262,6 +262,24 @@ def generar(ruta_yaml):
                 "height": cm(altura), "thickness": cm(evalua(tab.get("grosor", 0.10), variables)),
                 "pattern": "foreground"})
 
+        # Obstáculos macizos (chimeneas, pilares...): un muro con la forma del
+        # rectángulo, que además se descuenta de las estancias.
+        obstaculos = []
+        for obs in planta.get("obstaculos") or []:
+            ox, oy, oa, of = (evalua(obs[k], variables) for k in ("x", "y", "ancho", "fondo"))
+            obstaculos.append(box(ox, oy, ox + oa, oy + of))
+            if oa >= of:
+                inicio, fin, grosor = (ox, oy + of / 2), (ox + oa, oy + of / 2), of
+            else:
+                inicio, fin, grosor = (ox + oa / 2, oy), (ox + oa / 2, oy + of), oa
+            h.elemento("wall", {
+                "id": h.nuevo_id("obstaculo"), "level": nivel,
+                "xStart": X(inicio[0]), "yStart": Y(inicio[1]), "xEnd": X(fin[0]), "yEnd": Y(fin[1]),
+                "height": cm(altura), "thickness": cm(grosor), "pattern": "crossHatch"})
+            h.elemento("label", {"id": h.nuevo_id("texto"), "level": nivel,
+                                 "x": X(ox + oa + 0.55), "y": Y(oy + of / 2)},
+                       [f"<text>{escape(obs['nombre'])}</text>"])
+
         # Escalera de esta planta y hueco de la escalera de la planta inferior
         escalera = None
         if planta.get("escalera"):
@@ -269,7 +287,7 @@ def generar(ruta_yaml):
             ex, ey = evalua(e["x"], variables), evalua(e["y"], variables)
             ea, el = evalua(e["ancho"], variables), evalua(e["largo"], variables)
             escalera = box(ex, ey, ex + ea, ey + el)
-        descontar = unary_union([g for g in (escalera, escalera_anterior) if g is not None])
+        descontar = unary_union([g for g in (escalera, escalera_anterior, *obstaculos) if g is not None])
 
         for est in planta.get("estancias") or []:
             rect = box(*(lambda x, y, a, f: (x, y, x + a, y + f))(

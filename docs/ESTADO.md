@@ -48,7 +48,7 @@ Las superficies de cada estancia están en [`salida/superficies.md`](../salida/s
 **Planta baja** (altura 3,20 m, aprox):
 
 - Muro central existente de 30 cm en `x = 6,50 m`, que va de la fachada al fondo (posición ajustada por Edu el 24/10).
-- **Zona izquierda (entrada)**: unos 51 m². La puerta al patio está en el muro del fondo de esta zona, pegada al muro central (al otro lado queda la escalera). Posición corregida por Edu el 24/10.
+- **Zona izquierda (entrada)**: unos 51 m². La puerta al patio está en el muro del fondo de esta zona, cerca del muro central (x = 4,80 m), y es la única puerta exterior trasera. **Chimenea** adosada al muro izquierdo, en la esquina del fondo (unos 0,45 × 1,80 m). Ambas posiciones las marcó Edu el 24/10 y están estimadas sobre el plano.
 - **Cochera** a la derecha: unos 37,7 m² (sin contar la escalera).
 - **Escalera** de 1,00 m de ancho, junto al muro central por el **lado de la cochera**. Va desde la mitad de la casa hasta el muro del fondo y sube hacia el fondo.
 - Fachada: ventanuco, portón izquierdo (2,00 m) y portón de la cochera (2,45 m). Posiciones medidas sobre la foto, aproximadas.

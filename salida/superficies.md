@@ -12,7 +12,7 @@ Generado automáticamente por `tools/generar_sh3d.py` a partir de `casa.yaml`. N
 
 | Estancia | Superficie útil (m²) |
 |---|---|
-| Zona izquierda (entrada) | 50.9 |
+| Zona izquierda (entrada) | 50.2 |
 | Cochera | 37.7 |
 | Escalera (sube hacia el fondo) | 4.3 |
 | **Superficie útil interior total** | **95.5** |

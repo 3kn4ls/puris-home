@@ -1,0 +1,91 @@
+{
+  "referencia_catastral": "7806511YJ3070N0001SS",
+  "referencia_parcela": "7806511YJ3070N",
+  "direccion": "CL Purísima Alpatro 17, Garroferal, 03788 Vall de Gallinera (Alicante)",
+  "clase": "Urbano",
+  "uso_principal": "Industrial",
+  "anyo_construccion": 1910,
+  "superficie_construida_m2": 224,
+  "superficie_parcela_m2": 251,
+  "elementos_constructivos": [
+    {
+      "planta": "00",
+      "uso": "Almacén",
+      "superficie_m2": 112
+    },
+    {
+      "planta": "01",
+      "uso": "Almacén",
+      "superficie_m2": 112
+    }
+  ],
+  "fuentes": {
+    "ficha": "https://www1.sedecatastro.gob.es/CYCBienInmueble/OVCConCiud.aspx?del=3&mun=136&UrbRus=U&RefC=7806511YJ3070N0001SS",
+    "geometria_parcela": "https://ovc.catastro.meh.es/INSPIRE/wfsCP.aspx?service=wfs&version=2&request=getfeature&STOREDQUERIE_ID=GetParcel&refcat=7806511YJ3070N&srsname=EPSG::25830"
+  },
+  "fecha_consulta": "2026-10-24",
+  "crs": "EPSG:25830 (ETRS89 / UTM 30N), metros",
+  "centroide_wgs84": {
+    "lat": 38.820958,
+    "lon": -0.261288
+  },
+  "parcela_vertices_utm": [
+    [
+      737776.56,
+      4300472.46
+    ],
+    [
+      737776.76,
+      4300471.95
+    ],
+    [
+      737771.82,
+      4300469.87
+    ],
+    [
+      737766.92,
+      4300468.02
+    ],
+    [
+      737766.31,
+      4300467.79
+    ],
+    [
+      737764.91,
+      4300467.26
+    ],
+    [
+      737763.95,
+      4300466.86
+    ],
+    [
+      737759.15,
+      4300464.86
+    ],
+    [
+      737757.22,
+      4300464.06
+    ],
+    [
+      737752.71,
+      4300475.14
+    ],
+    [
+      737760.77,
+      4300478.33
+    ],
+    [
+      737763.85,
+      4300479.55
+    ],
+    [
+      737770.69,
+      4300482.35
+    ],
+    [
+      737772.32,
+      4300483.02
+    ]
+  ],
+  "nota": "Vértices 1..14 en el orden del GML (el último cierra con el primero). La geometría de la edificación (BuildingPart) no se pudo descargar; solo la de la parcela."
+}

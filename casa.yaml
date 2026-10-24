@@ -1,0 +1,66 @@
+# =====================================================================
+#  Casa Purísima 17 (Garroferal) - modelo editable
+# =====================================================================
+#  Este fichero es la "fuente de verdad" del plano. Se edita aquí y se
+#  regenera el .sh3d con:   python tools/generar_sh3d.py
+#
+#  SISTEMA DE COORDENADAS (todo en METROS):
+#    - Origen (0,0): esquina exterior IZQUIERDA de la fachada, mirando
+#      la casa desde la calle.
+#    - x: a lo largo de la fachada, de izquierda a derecha.
+#    - y: profundidad, desde la cara exterior de la fachada hacia el fondo.
+#  En Sweet Home 3D la fachada queda abajo del plano y el fondo arriba.
+#  Todas las medidas marcadas "aprox" son estimaciones a partir de las
+#  fotos de fachada y del catastro: hay que confirmarlas midiendo.
+# =====================================================================
+
+nombre: Casa Purísima 17
+salida: salida/casa_purisima.sh3d
+
+parcela:
+  catastro: datos/catastro/parcela_7806511YJ3070N.json
+  # Vértices (numeración del catastro, empezando en 1) que forman la
+  # fachada, de izquierda a derecha vistos desde la calle.
+  # Supuesto: la fachada es el lindero OESTE (vértices 10 -> 9).
+  fachada: [10, 9]
+
+edificio:
+  # Profundidad de la parte edificada medida desde la fachada.
+  # "auto" = la que da la superficie del catastro (112 m2 por planta).
+  fondo: auto
+  superficie_catastro_m2: 112
+  grosor_muro_exterior: 0.40   # aprox, muro de piedra antiguo
+
+plantas:
+  - id: pb
+    nombre: Planta baja
+    altura: 3.20          # aprox, suelo a techo
+    forjado: 0.0
+    huecos:               # puertas / ventanas en muros exteriores
+      - {nombre: Ventanuco,        muro: fachada, x: 1.45, ancho: 0.40, alto: 0.45, elevacion: 1.00, tipo: ventana}
+      - {nombre: Portón izquierdo, muro: fachada, x: 3.45, ancho: 2.00, alto: 2.60, elevacion: 0.00, tipo: puerta}
+      - {nombre: Portón cochera,   muro: fachada, x: 8.40, ancho: 2.45, alto: 2.80, elevacion: 0.00, tipo: puerta}
+      - {nombre: Puerta al patio,  muro: fondo,   x: 1.00, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
+    tabiques:             # muros interiores: [x1, y1] -> [x2, y2]
+      - {nombre: Muro central existente, desde: [6.90, 0.40], hasta: [6.90, fondo-0.40], grosor: 0.30}
+    # Estancias: rectángulos (x, y = esquina más cercana a fachada-izquierda).
+    # Se recortan solas contra los muros, así que "ancho"/"fondo" pueden
+    # pasarse de largo. Variables disponibles en expresiones:
+    #   fondo = fondo edificado, ancho = ancho de fachada, t = grosor muro.
+    estancias:
+      - {nombre: Zona izquierda (entrada), x: 0.40, y: 0.40, ancho: 6.35, fondo: fondo-0.80}
+      - {nombre: Cochera,                  x: 7.05, y: 0.40, ancho: ancho,  fondo: fondo-0.80}
+    escalera:             # tramo recto, sube hacia el fondo
+      {x: 5.75, y: fondo/2, ancho: 1.00, largo: fondo/2-0.40}
+
+  - id: p1
+    nombre: Primer piso
+    altura: 3.00          # aprox, hasta el arranque de cubierta
+    forjado: 0.25         # grosor del forjado entre plantas, aprox
+    huecos:
+      - {nombre: Ventana 1, muro: fachada, x: 1.15, ancho: 0.95, alto: 0.70, elevacion: 1.10, tipo: ventana}
+      - {nombre: Ventana 2, muro: fachada, x: 4.20, ancho: 0.55, alto: 0.60, elevacion: 1.20, tipo: ventana}
+    tabiques: []
+    estancias:
+      # El hueco de la escalera se descuenta automáticamente.
+      - {nombre: Planta primera diáfana, x: 0.40, y: 0.40, ancho: ancho, fondo: fondo-0.80}

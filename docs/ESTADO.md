@@ -12,7 +12,7 @@ Hacerse una idea de las opciones para distribuir la casa (planta baja y primer p
 |---|---|---|
 | 1 | Plano base a partir del catastro: contorno, m², dos plantas, muro central, escalera, huecos de fachada y patio | ✅ Hecho (pendiente de confirmar supuestos) |
 | 2 | Elegir la forma de modelar: revisar el MCP de Sweet Home 3D que hay en `F:\ws\mcp\sweethome3d-mcp-server` o seguir con `casa.yaml` y el generador | ⏳ Pendiente: no he podido acceder a ese ordenador |
-| 3 | Probar 2 o 3 distribuciones alternativas y compararlas por m² | ⏳ Pendiente |
+| 3 | Probar distribuciones alternativas y compararlas por m² | 🔶 Hechas 10 propuestas de planta baja (5 con cochera y 5 sin ella) en [`variantes/`](../variantes/README.md). Falta que Edu elija |
 | 4 | Añadir los pilares cuando se conozcan y ajustar lo que choque | ⏳ Pendiente de datos |
 
 ## Lo que está hecho (paso 1)
@@ -50,7 +50,7 @@ Las superficies de cada estancia están en [`salida/superficies.md`](../salida/s
 - Muro central existente de 30 cm en `x = 6,50 m`, que va de la fachada al fondo (posición ajustada por Edu el 24/10).
 - **Zona izquierda (entrada)**: unos 51 m². La puerta al patio está en el muro del fondo de esta zona, cerca del muro central (x = 4,80 m), y es la única puerta exterior trasera. **Chimenea** adosada al muro izquierdo, en la esquina del fondo (unos 0,45 × 1,80 m). Ambas posiciones las marcó Edu el 24/10 y están estimadas sobre el plano.
 - **Cochera** a la derecha: unos 36,2 m² (sin contar la escalera).
-- **Escalera en L** de 1,00 m de ancho, en el **lado de la cochera** junto al muro central. El primer tramo sube hacia el fondo desde la mitad de la casa (12 peldaños). Le sigue una meseta en la esquina del fondo y un segundo tramo de 6 peldaños que gira a la derecha pegado al muro del fondo. Son 20 peldaños de unos 17 cm con huella de 27 cm. Es un objeto 3D real con sus peldaños y abre automáticamente el hueco en el forjado del primer piso.
+- **Escalera en L**, tal y como se ve en el plano. Va en el **lado de la cochera**, pegada al muro central. El tramo largo, de 16 peldaños, sube desde la mitad de la casa hasta el muro del fondo. En su arranque tiene una meseta y un pie de 2 peldaños hacia la derecha. Son 20 peldaños de unos 17 cm con huella de 27 cm. Es un objeto 3D con peldaños tipo losa, que dejan libre el hueco de debajo (más de 2 m de altura libre a partir de y ≈ 7,1 m), y abre automáticamente el hueco en el forjado del primer piso. La forma de L la corrigió Edu el 24/10.
 - Fachada: ventanuco, portón izquierdo (2,00 m) y portón de la cochera (2,45 m). Posiciones medidas sobre la foto, aproximadas.
 
 **Primer piso** (altura 3,00 m hasta la cubierta, aprox; forjado de 25 cm):
@@ -77,7 +77,7 @@ Cada punto debería confirmarse o corregirse:
 2. **Lado de la fachada.** Se ha supuesto que la fachada a la calle es el lindero **oeste** de la parcela (vértices 10 → 9 del catastro), porque es el lado recto de unos 12 m. Si fuera el este, se cambia `parcela.fachada` a `[1, 14]` o el par que corresponda.
 3. **Alturas** de planta (3,20 y 3,00 m) y grosor de los muros (40 cm): estimadas.
 4. **Posición del muro central** (`x = 6,50 m`): estimada a partir de la foto y ajustada por Edu, sin medir.
-5. **Escalera**: ahora es en L, con peldaños cómodos de unos 17 cm. El segundo tramo ocupa 1,6 m del fondo de la cochera; se puede cambiar el reparto de peldaños (`peldanos_tramo1`) o el sentido de giro (`giro`) en `casa.yaml`.
+5. **Escalera**: en L, con peldaños cómodos de unos 17 cm. El reparto se cambia con `peldanos_pie` y el lado del pie con `giro` en `casa.yaml`. En las propuestas con cochera se sube desde la cochera.
 6. **Pilares**: no se conocen. Se añadirán cuando Edu tenga los datos.
 7. **Cubierta**: no está modelada; el primer piso llega hasta 3,00 m.
 
@@ -86,8 +86,13 @@ Cada punto debería confirmarse o corregirse:
 - Puertas y ventanas son cajas de color (marrón para puertas, azul para ventanas) que abren el hueco en el muro. Se pueden sustituir en Sweet Home 3D por modelos del catálogo.
 - Si se edita el `.sh3d` a mano en Sweet Home 3D y luego se vuelve a generar desde `casa.yaml`, **se pierden los cambios manuales**. Lo recomendable es tratar `casa.yaml` como fuente de verdad y usar Sweet Home 3D para visualizar y amueblar copias.
 
+## Propuestas de distribución (paso 3)
+
+El 24/10 Edu pidió al menos 5 propuestas con cochera y 5 sin ella. Todas debían tener un dormitorio de matrimonio con armario, una cocina y un baño con plato de ducha, ser lo más diáfanas posible y no tener pasillos. Se permitía aprovechar el hueco de debajo de la escalera. Están en [`variantes/README.md`](../variantes/README.md), con una tabla comparativa de m², y cada una tiene su `.sh3d`, planos y vista 3D en `variantes/salida/`. **Pendiente: que Edu elija una o varias para seguir trabajando**, y diseñar el primer piso, que sigue diáfano.
+
 ## Próximos pasos
 
-1. Confirmar o corregir los supuestos de arriba, sobre todo el fondo edificado y el patio.
-2. Revisar el MCP de `F:\ws\mcp\sweethome3d-mcp-server` cuando el ordenador donde está (DESKTOP-83Q2C6C) esté conectado al proyecto, y decidir si se usa o se sigue con el generador.
-3. Crear variantes de distribución (por ejemplo `variantes/a.yaml`, `variantes/b.yaml`) y comparar sus superficies.
+1. Elegir propuesta o propuestas de planta baja y afinarlas.
+2. Confirmar o corregir los supuestos de arriba, sobre todo el fondo edificado y el patio.
+3. Revisar el MCP de `F:\ws\mcp\sweethome3d-mcp-server` cuando el ordenador donde está (DESKTOP-83Q2C6C) esté conectado al proyecto, y decidir si se usa o se sigue con el generador.
+4. Distribuir el primer piso.

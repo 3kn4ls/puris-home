@@ -15,6 +15,7 @@ Generado automáticamente por `tools/generar_sh3d.py` a partir de `casa.yaml`. N
 | Zona izquierda (entrada) | 50.2 |
 | Cochera | 36.2 |
 | Escalera en L (20 peldaños de 17.2 cm) | 5.9 |
+| _Bajo la escalera: más de 2,00 m libres a partir de y = 7.13 m_ | |
 | **Superficie útil interior total** | **95.5** |
 | Superficie construida (catastro) | 111.9 |
 | Patio / resto de parcela | 139.3 |

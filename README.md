@@ -19,6 +19,10 @@ casa.yaml  ──►  tools/generar_sh3d.py  ──►  salida/casa_purisima.sh3
 
 Para redimensionar una estancia basta con cambiar un número en `casa.yaml` y volver a generar el archivo.
 
+Las **variantes** (`variantes/*.yaml`) empiezan con `base: casa.yaml` y solo redefinen lo que cambia de cada planta: tabiques, puertas, estancias y muebles. Se generan igual: `python tools/generar_sh3d.py variantes/c1.yaml`.
+
+Para ver bien los muebles en Sweet Home 3D, activa en Preferencias la opción de ver el mobiliario en el plano "desde arriba" en lugar del icono del catálogo.
+
 ### Coordenadas en `casa.yaml`
 
 - Origen `(0, 0)`: la esquina **exterior izquierda de la fachada**, mirando la casa desde la calle.
@@ -40,6 +44,8 @@ Comprobación opcional con el propio motor de Sweet Home 3D: carga el archivo y 
 
 ```bash
 java -Djava.awt.headless=true -cp SweetHome3D.jar tools/ValidarSH3D.java salida/casa_purisima.sh3d salida
+# muebles vistos desde arriba y recorte al edificio (necesita pantalla o xvfb-run y la carpeta lib/):
+java -Dj3d.rend=noop -cp "SweetHome3D-7.5/lib/*" tools/ValidarSH3D.java variantes/salida/c1.sh3d variantes/salida c1
 ```
 
 Vista 3D renderizada con el motor de fotos de Sweet Home 3D. Usa la carpeta `lib/` de la versión para Linux o de la portable, y en un servidor sin pantalla se lanza con `xvfb-run`:
@@ -60,5 +66,6 @@ java -Dj3d.rend=noop -cp "SweetHome3D-7.5/lib/*" tools/Render3D.java salida/casa
 | `tools/ValidarSH3D.java` | Validador y render del plano con Sweet Home 3D |
 | `tools/Render3D.java` | Render 3D (fotos) con Sweet Home 3D |
 | `salida/` | Archivo `.sh3d` generado, planos en PNG y superficies |
+| `variantes/` | Propuestas de distribución (YAML que parten de `casa.yaml`) y sus salidas |
 | `docs/ESTADO.md` | Estado del proyecto, supuestos y próximos pasos |
 | `docs/fotos/` | Fotos de la fachada (Google Street View) |

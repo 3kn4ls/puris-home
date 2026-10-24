@@ -1,0 +1,41 @@
+# C5 · Con cochera · Dormitorio semiabierto separado por el armario, baño bajo la escalera
+base: casa.yaml
+nombre: "C5 · Dormitorio semiabierto tras el armario"
+descripcion: >
+  Es la opción más diáfana con cochera. El dormitorio ocupa el fondo
+  izquierda, con la chimenea, y no tiene tabique hacia el salón: lo separa
+  un armario exento de 2,40 m y un murete parcial. La cocina va en línea
+  junto al muro central con una isla, y el salón y el comedor dan a la
+  calle. El baño va bajo la escalera, y la cochera se mantiene.
+salida: variantes/salida/c5.sh3d
+resumen: variantes/salida/c5.md
+plantas:
+  - id: pb
+    tabiques:
+      - {nombre: Muro central, desde: [6.50, 0.40], hasta: [6.50, 9.02], grosor: 0.30}
+      - {desde: [3.30, 6.70], hasta: [3.30, 9.02]}
+      - {desde: [6.65, 7.13], hasta: [7.65, 7.13], alto: 1.90}
+      - {desde: [7.65, 7.13], hasta: [8.40, 7.13]}
+      - {desde: [8.40, 7.13], hasta: [8.40, 9.02]}
+    puertas:
+      - {nombre: Paso a cochera y escalera, x: 6.50, y: 2.80, ancho: 0.80, orientacion: v, grosor: 0.30}
+      - {nombre: Puerta baño, x: 6.50, y: 7.40, ancho: 0.70, orientacion: v, grosor: 0.30}
+    estancias:
+      - {nombre: Baño (bajo la escalera), x: 6.65, y: 7.13, ancho: 1.75, fondo: 1.89, bajo_escalera: true}
+      - {nombre: Trastero bajo escalera, x: 6.65, y: 4.70, ancho: 1.00, fondo: 2.43, bajo_escalera: true}
+      - {nombre: Dormitorio (semiabierto), x: 0.40, y: 6.00, ancho: 2.90, fondo: 3.02}
+      - {nombre: Cocina - comedor - salón, x: 0.40, y: 0.40, ancho: 5.95, fondo: 8.62}
+      - {nombre: Cochera, x: 6.65, y: 0.40, ancho: 5.00, fondo: 8.62}
+    muebles:
+      - {nombre: Armario separador, tipo: armario, x: 0.85, y: 5.40, ancho: 2.40, fondo: 0.60}
+      - {nombre: Cama 150, tipo: cama, x: 1.40, y: 7.00, ancho: 1.50, fondo: 2.00}
+      - {nombre: Encimera, tipo: cocina, x: 5.75, y: 4.30, ancho: 0.60, fondo: 3.00}
+      - {nombre: Nevera, tipo: nevera, x: 5.70, y: 7.35, ancho: 0.65, fondo: 0.65}
+      - {nombre: Isla, tipo: cocina, x: 4.20, y: 4.80, ancho: 0.90, fondo: 2.00}
+      - {nombre: Mesa comedor, tipo: mesa, x: 2.40, y: 3.40, ancho: 1.60, fondo: 0.90}
+      - {nombre: Sofá, tipo: sofa, x: 1.00, y: 1.60, ancho: 2.20, fondo: 0.90}
+      - {nombre: Ducha 90x80, tipo: ducha, x: 6.70, y: 8.20, ancho: 0.90, fondo: 0.80}
+      - {nombre: WC, tipo: inodoro, x: 7.85, y: 8.25, ancho: 0.40, fondo: 0.70}
+      - {nombre: Lavabo, tipo: lavabo, x: 7.75, y: 7.22, ancho: 0.60, fondo: 0.45}
+      - {nombre: Lavadora, tipo: lavadora, x: 6.75, y: 0.50, ancho: 0.60, fondo: 0.60}
+      - {nombre: Coche, tipo: coche, x: 9.30, y: 0.70, ancho: 1.80, fondo: 4.30}

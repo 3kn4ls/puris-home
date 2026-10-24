@@ -36,6 +36,23 @@ COLOR_SUELO_INTERIOR = "FFE8DCC8"
 COLOR_SUELO_PATIO = "FFB7C9A0"
 COLOR_SUELO_ESCALERA = "FFC0C0C0"
 
+# Tipos de mueble: (color ARGB, altura por defecto en metros)
+MUEBLES = {
+    "cama": ("FFD9C2A0", 0.55),
+    "armario": ("FF8B6B4A", 2.20),
+    "ducha": ("FF8FC3DD", 0.06),
+    "inodoro": ("FFF4F4F4", 0.75),
+    "lavabo": ("FFF4F4F4", 0.85),
+    "cocina": ("FFBDBDBD", 0.90),
+    "nevera": ("FFE0E0E0", 1.85),
+    "lavadora": ("FFE0E0E0", 0.85),
+    "sofa": ("FF7A8FA6", 0.80),
+    "mesa": ("FFA67C52", 0.75),
+    "coche": ("FFB03A2E", 1.50),
+    "almacen": ("FFBFAF8F", 1.00),
+    "mueble": ("FFCCCCCC", 0.80),
+}
+
 
 # ---------------------------------------------------------------------------
 # Geometría
@@ -124,46 +141,55 @@ f 4 1 5 8
 
 
 def escalera_en_l(e, variables, subida):
-    """Calcula los peldaños de una escalera en L.
+    """Calcula los peldaños de una escalera en L, tal y como se ve en el plano.
 
-    Primer tramo recto hacia el fondo pegado a x, meseta en la esquina del
-    fondo y segundo tramo girando a derecha o izquierda a lo largo del muro
-    del fondo. Devuelve (huella en planta, lista de bloques
-    (x0, y0, x1, y1, cota superior) en metros, recorrido para la flecha).
+    El tramo largo sube hacia el fondo pegado a `x` y termina en `fin`. En su
+    arranque (el extremo más cercano a la fachada) hay una meseta en la
+    esquina y un tramo corto, el "pie" de la L, que sale hacia la derecha
+    (o hacia la izquierda con `giro: izquierda`). Se empieza a subir por el
+    extremo del pie. Devuelve (huella en planta, bloques (x0, y0, x1, y1,
+    cota superior) en metros, recorrido para la flecha, nº de tabicas, tabica).
     """
     x = evalua(e["x"], variables)
     fin = evalua(e["fin"], variables)
     ancho = evalua(e["ancho"], variables)
     huella = evalua(e.get("huella", 0.27), variables)
-    n1 = int(e["peldanos_tramo1"])
+    n_pie = int(e.get("peldanos_pie", 2))
     total = round(subida / 0.175)
     tabica = subida / total
     signo = 1 if e.get("giro", "derecha") == "derecha" else -1
-    inicio = fin - ancho - (n1 - 1) * huella
-    bloques = []
-    for k in range(1, n1):
-        bloques.append((x, inicio + (k - 1) * huella, x + ancho, inicio + k * huella, k * tabica))
-    bloques.append((x, fin - ancho, x + ancho, fin, n1 * tabica))  # meseta
+    n_largo = total - 2 - n_pie            # huellas del tramo largo
+    y_meseta = fin - n_largo * huella - ancho
     borde = x + ancho if signo > 0 else x
-    for j in range(1, total - n1):
-        a, b = borde + signo * (j - 1) * huella, borde + signo * j * huella
-        bloques.append((min(a, b), fin - ancho, max(a, b), fin, (n1 + j) * tabica))
-    huella_planta = unary_union([box(*b[:4]) for b in bloques])
-    llegada = borde + signo * (total - n1 - 1) * huella
-    recorrido = [(x + ancho / 2, inicio + 0.1), (x + ancho / 2, fin - ancho / 2),
-                 (llegada - signo * 0.1, fin - ancho / 2)]
+    bloques = []
+    for k in range(1, n_pie + 1):          # pie: el peldaño 1 es el más alejado de la meseta
+        a = borde + signo * (n_pie - k) * huella
+        b = a + signo * huella
+        bloques.append((min(a, b), y_meseta, max(a, b), y_meseta + ancho, k * tabica))
+    bloques.append((x, y_meseta, x + ancho, y_meseta + ancho, (n_pie + 1) * tabica))  # meseta
+    for j in range(1, n_largo + 1):
+        y0 = y_meseta + ancho + (j - 1) * huella
+        bloques.append((x, y0, x + ancho, y0 + huella, (n_pie + 1 + j) * tabica))
+    huella_planta = (unary_union([box(*b[:4]) for b in bloques])
+                     .buffer(0.005, join_style=2).buffer(-0.005, join_style=2).simplify(0.001))
+    arranque = borde + signo * n_pie * huella
+    recorrido = [(arranque - signo * 0.1, y_meseta + ancho / 2), (x + ancho / 2, y_meseta + ancho / 2),
+                 (x + ancho / 2, fin - 0.1)]
     return huella_planta, bloques, recorrido, total, tabica
 
 
 def obj_bloques(bloques, subida):
-    """Modelo OBJ (en cm) con un bloque macizo por peldaño.
+    """Modelo OBJ (en cm) con un bloque por peldaño.
 
+    Cada peldaño es una losa escalonada (no llega al suelo), así el hueco de
+    debajo de la escalera queda libre y se puede aprovechar.
     Ejes OBJ de Sweet Home 3D: X = X del plano, Y = altura, Z = Y del plano.
     Se añade un canto fino a la cota de llegada para que la pieza alcance el
     forjado superior y Sweet Home 3D recorte el hueco.
     """
     lineas = ["# Escalera generada por tools/generar_sh3d.py"]
-    cajas = [(b[0], b[1], b[2], b[3], 0.0, b[4]) for b in bloques]
+    tabica = bloques[0][4]
+    cajas = [(b[0], b[1], b[2], b[3], max(0.0, b[4] - tabica - 0.12), b[4]) for b in bloques]
     ultimo = bloques[-1]
     cajas.append((ultimo[0], ultimo[1], ultimo[2], ultimo[3], subida - 0.02, subida + 0.01))
     for n, (x0, y0, x1, y1, z0, z1) in enumerate(cajas):
@@ -205,6 +231,22 @@ def png_escalera(bloques, recorrido):
     fig.savefig(salida, format="png", transparent=True)
     plt.close(fig)
     return salida.getvalue()
+
+
+def png_color(argb, ancho=8, alto=8):
+    """PNG de un solo color, usado como icono de planta de los muebles. Se hace
+    con las proporciones del mueble para que Sweet Home 3D lo pinte entero."""
+    rgb = bytes.fromhex(argb[2:])
+    fila = b"\x00" + rgb * ancho
+    datos = zlib.compress(fila * alto)
+
+    def chunk(tipo, contenido):
+        return (struct.pack(">I", len(contenido)) + tipo + contenido
+                + struct.pack(">I", zlib.crc32(tipo + contenido) & 0xFFFFFFFF))
+
+    return (b"\x89PNG\r\n\x1a\n"
+            + chunk(b"IHDR", struct.pack(">IIBBBBB", ancho, alto, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", datos) + chunk(b"IEND", b""))
 
 
 def png_gris(lado=16):
@@ -259,8 +301,24 @@ def puntos(coords):
     return [f"<point x={quoteattr(X(x))} y={quoteattr(Y(y))}/>" for x, y in coords]
 
 
-def generar(ruta_yaml):
+def cargar(ruta_yaml):
+    """Lee un YAML. Si tiene `base:`, parte de ese fichero y sobrescribe las
+    claves de primer nivel y, dentro de `plantas`, las claves de cada planta
+    con el mismo `id` (así una variante solo cambia lo que necesita)."""
     conf = yaml.safe_load(Path(ruta_yaml).read_text(encoding="utf-8"))
+    if "base" not in conf:
+        return conf
+    base = cargar(RAIZ / conf.pop("base"))
+    plantas = {p["id"]: p for p in base["plantas"]}
+    for p in conf.pop("plantas", []):
+        plantas[p["id"]].update(p)
+    base.update(conf)
+    base["plantas"] = list(plantas.values())
+    return base
+
+
+def generar(ruta_yaml):
+    conf = cargar(ruta_yaml)
     catastro = json.loads((RAIZ / conf["parcela"]["catastro"]).read_text(encoding="utf-8"))
 
     parcela, ux, uy, _ = parcela_local(catastro, conf["parcela"]["fachada"])
@@ -350,7 +408,8 @@ def generar(ruta_yaml):
             h.elemento("wall", {
                 "id": h.nuevo_id("tabique"), "level": nivel,
                 "xStart": X(x1), "yStart": Y(y1), "xEnd": X(x2), "yEnd": Y(y2),
-                "height": cm(altura), "thickness": cm(evalua(tab.get("grosor", 0.10), variables)),
+                "height": cm(evalua(tab.get("alto", altura), variables)),
+                "thickness": cm(evalua(tab.get("grosor", 0.10), variables)),
                 "pattern": "foreground"})
 
         # Obstáculos macizos (chimeneas, pilares...): un muro con la forma del
@@ -370,6 +429,37 @@ def generar(ruta_yaml):
             h.elemento("label", {"id": h.nuevo_id("texto"), "level": nivel,
                                  "x": X(ox + oa + 0.55), "y": Y(oy + of / 2)},
                        [f"<text>{escape(obs['nombre'])}</text>"])
+
+        # Puertas interiores, sobre tabiques: "h" = tabique paralelo a la fachada
+        # (la puerta va de x a x+ancho), "v" = perpendicular (de y a y+ancho).
+        for pu in planta.get("puertas") or []:
+            px, py, pa = (evalua(pu[k], variables) for k in ("x", "y", "ancho"))
+            vertical = pu.get("orientacion", "h") == "v"
+            grosor = evalua(pu.get("grosor", 0.10), variables)
+            cx, cy = (px, py + pa / 2) if vertical else (px + pa / 2, py)
+            h.elemento("doorOrWindow", {
+                "id": h.nuevo_id("puerta"), "level": nivel, "name": pu.get("nombre", "Puerta"),
+                "icon": "icono.png", "model": "caja.obj", "x": X(cx), "y": Y(cy), "elevation": "0",
+                "width": cm(pa), "depth": cm(grosor + 0.02), "height": cm(evalua(pu.get("alto", 2.03), variables)),
+                "angle": f"{math.pi / 2:.5f}" if vertical else "0", "color": COLOR_PUERTA,
+                "doorOrWindow": "true", "doorOrWindowBoundToWall": "true",
+                "wallThickness": "1", "wallDistance": "0"})
+
+        # Muebles (cajas de color con su nombre) para comprobar que todo cabe
+        for m in planta.get("muebles") or []:
+            mx, my, ma, mf = (evalua(m[k], variables) for k in ("x", "y", "ancho", "fondo"))
+            color, alto = MUEBLES[m.get("tipo", "mueble")]
+            color = m.get("color", color)
+            px, py = max(1, round(ma * 50)), max(1, round(mf * 50))
+            icono = f"color_{color}_{px}x{py}.png"
+            modelos[icono] = png_color(color, px, py)
+            h.elemento("pieceOfFurniture", {
+                "id": h.nuevo_id("mueble"), "level": nivel, "name": m["nombre"],
+                "icon": icono, "planIcon": icono, "model": "caja.obj",
+                "x": X(mx + ma / 2), "y": Y(my + mf / 2),
+                "elevation": cm(evalua(m.get("elevacion", 0), variables)),
+                "width": cm(ma), "depth": cm(mf), "height": cm(evalua(m.get("alto", alto), variables)),
+                "color": color, "nameVisible": "true"})
 
         # Escalera de esta planta y hueco de la escalera de la planta inferior
         escalera = None
@@ -395,12 +485,26 @@ def generar(ruta_yaml):
                 "color": "FFB0A898", "movable": "false", "staircaseCutOutShape": camino})
         descontar = unary_union([g for g in (escalera, escalera_anterior, *obstaculos) if g is not None])
 
+        # Las estancias se reparten en orden: cada una se queda con lo que no
+        # han ocupado las anteriores (así basta con un rectángulo grande al final).
+        ocupado = descontar
+        bajo_escalera = Polygon()
         for est in planta.get("estancias") or []:
-            rect = box(*(lambda x, y, a, f: (x, y, x + a, y + f))(
-                *(evalua(est[k], variables) for k in ("x", "y", "ancho", "fondo"))))
+            if "puntos" in est:
+                rect = Polygon([[evalua(v, variables) for v in p] for p in est["puntos"]])
+            else:
+                rect = box(*(lambda x, y, a, f: (x, y, x + a, y + f))(
+                    *(evalua(est[k], variables) for k in ("x", "y", "ancho", "fondo"))))
             zona = rect.intersection(interior)
-            if not descontar.is_empty:
-                zona = zona.difference(descontar)
+            libre = ocupado
+            if est.get("bajo_escalera") and escalera is not None:
+                # Puede ocupar el hueco bajo la escalera
+                libre = ocupado.difference(escalera.difference(bajo_escalera))
+            if not libre.is_empty:
+                zona = zona.difference(libre)
+            if est.get("bajo_escalera") and escalera is not None:
+                bajo_escalera = unary_union([bajo_escalera, zona.intersection(escalera)])
+            ocupado = unary_union([ocupado, zona])
             for pol in poligonos(zona):
                 h.elemento("room", {
                     "id": h.nuevo_id("estancia"), "level": nivel, "name": est["nombre"],
@@ -409,10 +513,11 @@ def generar(ruta_yaml):
             resumen.append(f"| {est['nombre']} | {zona.area:.1f} |")
 
         if escalera is not None:
-            h.elemento("room", {
-                "id": h.nuevo_id("escalera"), "level": nivel, "name": "Escalera",
-                "areaVisible": "false", "floorColor": COLOR_SUELO_ESCALERA},
-                puntos(anillo(escalera)))
+            for pol in poligonos(escalera.difference(bajo_escalera)):
+                h.elemento("room", {
+                    "id": h.nuevo_id("escalera"), "level": nivel, "name": "Escalera",
+                    "areaVisible": "false", "floorColor": COLOR_SUELO_ESCALERA},
+                    puntos(anillo(pol)))
             h.elemento("polyline", {
                 "id": h.nuevo_id("subida"), "level": nivel, "thickness": "3",
                 "capStyle": "BUTT", "joinStyle": "MITER", "dashStyle": "SOLID",
@@ -420,6 +525,9 @@ def generar(ruta_yaml):
                 "closedPath": "false", "color": "FF000000"},
                 puntos(recorrido))
             resumen.append(f"| Escalera en L ({n_tabicas} peldaños de {tabica * 100:.1f} cm) | {escalera.area:.1f} |")
+            # Altura libre bajo la escalera (para aprovechar el hueco)
+            resumen.append(f"| _Bajo la escalera: más de 2,00 m libres a partir de y = "
+                           f"{next((b[1] for b in bloques if b[4] - 0.20 >= 2.0), 0):.2f} m_ | |")
         if escalera_anterior is not None:
             h.elemento("polyline", {
                 "id": h.nuevo_id("hueco-escalera"), "level": nivel, "thickness": "2",
@@ -495,7 +603,7 @@ def generar(ruta_yaml):
     cabecera = [
         f"# Superficies - {conf['nombre']}",
         "",
-        "Generado automáticamente por `tools/generar_sh3d.py` a partir de `casa.yaml`. No editar a mano.",
+        f"Generado automáticamente por `tools/generar_sh3d.py` a partir de `{Path(ruta_yaml).name}`. No editar a mano.",
         "",
         f"- Ancho de fachada (exterior): **{ancho_fachada:.2f} m**",
         f"- Fondo edificado (exterior): **{fondo:.2f} m**"
@@ -504,7 +612,10 @@ def generar(ruta_yaml):
         f"- Superficie de parcela: **{parcela.area:.1f} m²**",
         f"- Norte: {norte:.0f}° en sentido horario desde la parte de arriba del plano",
     ]
-    (salida.parent / "superficies.md").write_text("\n".join(cabecera + resumen) + "\n", encoding="utf-8")
+    resumen_md = RAIZ / conf["resumen"] if "resumen" in conf else salida.parent / "superficies.md"
+    if conf.get("descripcion"):
+        cabecera += ["", conf["descripcion"].strip()]
+    resumen_md.write_text("\n".join(cabecera + resumen) + "\n", encoding="utf-8")
     print(f"Generado {salida.relative_to(RAIZ)} (fondo edificado {fondo:.2f} m, "
           f"fachada {ancho_fachada:.2f} m)")
     return salida

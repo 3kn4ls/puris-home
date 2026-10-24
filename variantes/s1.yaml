@@ -1,0 +1,46 @@
+# S1 · Sin cochera · Salón en la antigua cochera, dormitorio al fondo derecha
+base: casa.yaml
+nombre: "S1 · Salón en la antigua cochera"
+descripcion: >
+  El portón de la cochera se convierte en un ventanal y esa parte delantera
+  pasa a ser el salón, abierto a la zona izquierda por un hueco de 2,80 m en
+  el muro central. El dormitorio va al fondo derecha y el baño bajo la
+  escalera, con entrada desde la cocina. Toda la zona izquierda es cocina y
+  comedor, con la chimenea y la salida al patio.
+salida: variantes/salida/s1.sh3d
+resumen: variantes/salida/s1.md
+plantas:
+  - id: pb
+    huecos:
+      - {nombre: Ventanuco,        muro: fachada, x: 1.45, ancho: 0.40, alto: 0.45, elevacion: 1.00, tipo: ventana}
+      - {nombre: Puerta de entrada, muro: fachada, x: 3.45, ancho: 2.00, alto: 2.60, elevacion: 0.00, tipo: puerta}
+      - {nombre: Ventanal (antiguo portón), muro: fachada, x: 8.40, ancho: 2.45, alto: 2.60, elevacion: 0.00, tipo: ventana}
+      - {nombre: Puerta al patio,  muro: fondo,   x: 4.80, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
+    tabiques:
+      - {nombre: Muro central (abierto delante), desde: [6.50, 3.20], hasta: [6.50, 9.02], grosor: 0.30}
+      - {desde: [8.40, 5.40], hasta: [11.60, 5.40]}
+      - {desde: [8.40, 5.40], hasta: [8.40, 7.13]}
+      - {desde: [6.65, 7.13], hasta: [7.65, 7.13], alto: 1.90}   # bajo los peldaños
+      - {desde: [7.65, 7.13], hasta: [8.40, 7.13]}
+      - {desde: [8.40, 7.13], hasta: [8.40, 9.02]}
+    puertas:
+      - {nombre: Puerta dormitorio, x: 10.20, y: 5.40, ancho: 0.80}
+      - {nombre: Puerta baño, x: 6.50, y: 7.40, ancho: 0.70, orientacion: v, grosor: 0.30}
+    estancias:
+      - {nombre: Baño (bajo la escalera), x: 6.65, y: 7.13, ancho: 1.75, fondo: 1.89, bajo_escalera: true}
+      - {nombre: Trastero bajo escalera, x: 6.65, y: 4.70, ancho: 1.00, fondo: 2.43, bajo_escalera: true}
+      - {nombre: Dormitorio, x: 8.40, y: 5.40, ancho: 3.20, fondo: 3.62}
+      - {nombre: Salón, x: 6.65, y: 0.40, ancho: 5.00, fondo: 8.62}
+      - {nombre: Cocina - comedor, x: 0.40, y: 0.40, ancho: 5.95, fondo: 8.62}
+    muebles:
+      - {nombre: Cama 150, tipo: cama, x: 9.20, y: 7.00, ancho: 1.50, fondo: 2.00}
+      - {nombre: Armario, tipo: armario, x: 10.85, y: 5.50, ancho: 0.60, fondo: 1.80}
+      - {nombre: Ducha 90x80, tipo: ducha, x: 6.70, y: 8.20, ancho: 0.90, fondo: 0.80}
+      - {nombre: WC, tipo: inodoro, x: 7.85, y: 8.25, ancho: 0.40, fondo: 0.70}
+      - {nombre: Lavabo, tipo: lavabo, x: 7.75, y: 7.22, ancho: 0.60, fondo: 0.45}
+      - {nombre: Encimera, tipo: cocina, x: 5.75, y: 3.40, ancho: 0.60, fondo: 3.20}
+      - {nombre: Nevera, tipo: nevera, x: 5.70, y: 6.65, ancho: 0.65, fondo: 0.65}
+      - {nombre: Isla, tipo: cocina, x: 4.10, y: 4.00, ancho: 0.90, fondo: 1.80}
+      - {nombre: Mesa comedor, tipo: mesa, x: 1.40, y: 2.00, ancho: 1.00, fondo: 1.80}
+      - {nombre: Sofá, tipo: sofa, x: 8.60, y: 2.50, ancho: 2.20, fondo: 0.90}
+      - {nombre: Sillones chimenea, tipo: sofa, x: 2.20, y: 7.40, ancho: 0.90, fondo: 1.40}

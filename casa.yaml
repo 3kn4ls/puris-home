@@ -52,17 +52,18 @@ plantas:
       - {nombre: Cochera,                  x: 6.65, y: 0.40, ancho: ancho,  fondo: fondo-0.80}
     obstaculos:           # elementos macizos que restan superficie (chimeneas, pilares...)
       - {nombre: Chimenea, x: 0.40, y: fondo-2.20, ancho: 0.45, fondo: 1.80}   # aprox, marcada por Edu
-    # Escalera en L, en el lado de la cochera pegada al muro central:
-    # primer tramo hacia el fondo, meseta en la esquina y segundo tramo
-    # girando a lo largo del muro del fondo. La altura de cada peldaño
-    # sale sola (unos 17,5 cm) a partir de la altura de planta + forjado.
+    # Escalera en L tal y como se ve en el plano, en el lado de la cochera:
+    # el tramo largo sube hacia el fondo pegado al muro central y en su
+    # arranque hay una meseta y un "pie" corto de peldaños hacia la derecha.
+    # La altura de cada peldaño sale sola (unos 17 cm) a partir de la altura
+    # de planta + forjado.
     escalera:
-      x: 6.65               # borde izquierdo del primer tramo
-      fin: fondo-0.40       # cara interior del muro del fondo
+      x: 6.65               # cara del muro central (lado cochera)
+      fin: fondo-0.40       # el tramo largo llega hasta el muro del fondo
       ancho: 1.00
       huella: 0.27          # fondo de cada peldaño
-      peldanos_tramo1: 13   # peldaños hasta la meseta (incluida)
-      giro: derecha         # hacia dónde gira el segundo tramo
+      peldanos_pie: 2       # peldaños del pie de la L, antes de la meseta
+      giro: derecha         # hacia dónde sale el pie
 
   - id: p1
     nombre: Primer piso

@@ -17,7 +17,25 @@ python tools/generar_sh3d.py variantes/c1.yaml      # -> variantes/salida/c1.sh3
 
 En `salida/` hay, para cada propuesta, el `.sh3d`, el plano de cada planta (`<id>_planta_baja.png`), una vista 3D de la planta baja (`<id>_3d.png`) y las superficies (`<id>.md`).
 
-## Resumen (m² útiles)
+## Reglas de Edu (24/10/2026)
+
+Estas reglas se suman a los requisitos de arriba y se aplican todas a la vez:
+
+1. El **salón** va junto a la **chimenea**.
+2. El **dormitorio** va **detrás de la cochera**, al fondo derecha, con **ventana al patio**. Esa ventana es nueva, en el muro del fondo.
+3. La **cocina**, el **baño** y el **salón** van en la **zona izquierda**.
+
+Las propuestas **R1, R2 y R3** cumplen estas reglas. Las C y las S son anteriores y no las cumplen todas.
+
+| Id | Propuesta | Salón | Cocina y comedor | Baño | Dormitorio | Otros |
+|---|---|---|---|---|---|---|
+| R1 | Con cochera: cocina delante y baño en el centro | 17,1 | 29,1 | 4,0 | 11,6 | Cochera 24,6 (4,9 m de fondo) |
+| R2 | Con cochera: baño delante y cocina en línea | 15,9 | 30,4 | 4,0 | 11,6 | Cochera 24,6 (4,9 m de fondo) |
+| R3 | Sin cochera: recibidor y estudio delante | 17,1 | 29,1 | 4,0 | 12,8 | Recibidor y estudio 23,4 |
+
+En R1 y R2, la escalera y el dormitorio se alcanzan por el lateral de la cochera, en una franja de 1 m junto al coche. Es el precio de mantener la cochera con el dormitorio detrás. R3 lo evita convirtiendo la cochera en recibidor.
+
+## Resumen de C y S (m² útiles)
 
 | Id | Propuesta | Dormitorio | Baño | Zona de día | Cochera / otros |
 |---|---|---|---|---|---|

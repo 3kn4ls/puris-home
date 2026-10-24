@@ -1,0 +1,51 @@
+# R3 · Reglas de Edu · Sin cochera · Como R1, con la antigua cochera de recibidor y estudio
+base: casa.yaml
+nombre: "R3 · Sin cochera: recibidor y estudio delante"
+descripcion: >
+  Es la misma zona izquierda que R1: cocina delante, baño en el centro y
+  salón junto a la chimenea. La antigua cochera pasa a ser recibidor y
+  estudio, con el portón convertido en ventanal y abierta a la cocina por un
+  hueco de 2,2 m en el muro central. Desde ahí se llega al dormitorio y a la
+  escalera sin pasar por ningún garaje. El dormitorio, detrás, sale más
+  grande y tiene una ventana nueva al patio.
+salida: variantes/salida/r3.sh3d
+resumen: variantes/salida/r3.md
+plantas:
+  - id: pb
+    huecos:
+      - {nombre: Ventanuco,        muro: fachada, x: 1.45, ancho: 0.40, alto: 0.45, elevacion: 1.00, tipo: ventana}
+      - {nombre: Puerta de entrada, muro: fachada, x: 3.45, ancho: 2.00, alto: 2.60, elevacion: 0.00, tipo: puerta}
+      - {nombre: Ventanal (antiguo portón), muro: fachada, x: 8.40, ancho: 2.45, alto: 2.60, elevacion: 0.00, tipo: ventana}
+      - {nombre: Puerta al patio,  muro: fondo,   x: 4.80, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
+      - {nombre: Ventana dormitorio (nueva), muro: fondo, x: 9.60, ancho: 1.20, alto: 1.10, elevacion: 1.00, tipo: ventana}
+    tabiques:
+      - {nombre: Muro central (abierto delante), desde: [6.50, 2.60], hasta: [6.50, 9.02], grosor: 0.30}
+      - {desde: [4.35, 4.00], hasta: [6.35, 4.00]}
+      - {desde: [4.35, 4.00], hasta: [4.35, 6.00]}
+      - {desde: [4.35, 6.00], hasta: [6.35, 6.00]}
+      - {desde: [8.40, 4.90], hasta: [11.60, 4.90]}
+      - {desde: [8.40, 4.90], hasta: [8.40, 9.02]}
+    puertas:
+      - {nombre: Puerta baño, x: 4.60, y: 4.00, ancho: 0.70}
+      - {nombre: Puerta dormitorio, x: 9.40, y: 4.90, ancho: 0.80}
+    estancias:
+      - {nombre: Trastero bajo escalera, x: 6.65, y: 4.70, ancho: 1.00, fondo: 4.32, bajo_escalera: true}
+      - {nombre: Baño, x: 4.35, y: 4.00, ancho: 2.00, fondo: 2.00}
+      - {nombre: Salón (chimenea), x: 0.40, y: 6.00, ancho: 5.95, fondo: 3.02}
+      - {nombre: Dormitorio, x: 8.40, y: 4.90, ancho: 3.20, fondo: 4.12}
+      - {nombre: Cocina - comedor, x: 0.40, y: 0.40, ancho: 5.95, fondo: 8.62}
+      - {nombre: Recibidor / estudio, x: 6.65, y: 0.40, ancho: 5.00, fondo: 8.62}
+    muebles:
+      - {nombre: Encimera, tipo: cocina, x: 0.45, y: 0.45, ancho: 2.80, fondo: 0.60}
+      - {nombre: Encimera, tipo: cocina, x: 0.45, y: 1.05, ancho: 0.60, fondo: 1.60}
+      - {nombre: Nevera, tipo: nevera, x: 0.45, y: 2.70, ancho: 0.65, fondo: 0.65}
+      - {nombre: Mesa comedor, tipo: mesa, x: 1.80, y: 2.60, ancho: 1.60, fondo: 0.90}
+      - {nombre: Lavabo, tipo: lavabo, x: 4.40, y: 4.70, ancho: 0.45, fondo: 0.60}
+      - {nombre: WC, tipo: inodoro, x: 4.40, y: 5.25, ancho: 0.70, fondo: 0.40}
+      - {nombre: Ducha 80x120, tipo: ducha, x: 5.50, y: 4.75, ancho: 0.80, fondo: 1.20}
+      - {nombre: Sofá, tipo: sofa, x: 2.40, y: 6.60, ancho: 0.90, fondo: 2.00}
+      - {nombre: Butaca, tipo: sofa, x: 1.10, y: 6.20, ancho: 0.80, fondo: 0.80}
+      - {nombre: Cama 150, tipo: cama, x: 9.50, y: 6.40, ancho: 2.00, fondo: 1.50}
+      - {nombre: Armario, tipo: armario, x: 8.45, y: 6.40, ancho: 0.60, fondo: 2.20}
+      - {nombre: Mesa estudio, tipo: mesa, x: 10.00, y: 1.20, ancho: 1.40, fondo: 0.70}
+      - {nombre: Lavadora, tipo: lavadora, x: 10.90, y: 4.20, ancho: 0.60, fondo: 0.60}

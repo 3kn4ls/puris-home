@@ -1,0 +1,50 @@
+# R2 · Reglas de Edu · Con cochera · Baño delante con ventanuco, cocina en línea junto al muro central
+base: casa.yaml
+nombre: "R2 · Con cochera: baño delante y cocina en línea"
+descripcion: >
+  Sigue las reglas de Edu. El baño ocupa la esquina delantera izquierda, con
+  el ventanuco. La cocina va en línea contra el muro central, con isla, y el
+  comedor en el centro. El salón queda al fondo junto a la chimenea y la
+  salida al patio. El dormitorio va detrás de la cochera, con una ventana
+  nueva al patio, y la cochera se mantiene como en R1.
+salida: variantes/salida/r2.sh3d
+resumen: variantes/salida/r2.md
+plantas:
+  - id: pb
+    huecos:
+      - {nombre: Ventanuco,        muro: fachada, x: 1.45, ancho: 0.40, alto: 0.45, elevacion: 1.00, tipo: ventana}
+      - {nombre: Portón izquierdo, muro: fachada, x: 3.45, ancho: 2.00, alto: 2.60, elevacion: 0.00, tipo: puerta}
+      - {nombre: Portón cochera,   muro: fachada, x: 8.40, ancho: 2.45, alto: 2.80, elevacion: 0.00, tipo: puerta}
+      - {nombre: Puerta al patio,  muro: fondo,   x: 4.80, ancho: 0.90, alto: 2.10, elevacion: 0.00, tipo: puerta}
+      - {nombre: Ventana dormitorio (nueva), muro: fondo, x: 9.60, ancho: 1.20, alto: 1.10, elevacion: 1.00, tipo: ventana}
+    tabiques:
+      - {nombre: Muro central, desde: [6.50, 0.40], hasta: [6.50, 9.02], grosor: 0.30}
+      - {desde: [0.40, 2.40], hasta: [2.40, 2.40]}
+      - {desde: [2.40, 0.40], hasta: [2.40, 2.40]}
+      - {desde: [8.40, 5.30], hasta: [11.60, 5.30]}
+      - {desde: [8.40, 5.30], hasta: [8.40, 9.02]}
+    puertas:
+      - {nombre: Puerta baño, x: 2.40, y: 1.50, ancho: 0.70, orientacion: v}
+      - {nombre: Paso a cochera y escalera, x: 6.50, y: 2.80, ancho: 0.80, orientacion: v, grosor: 0.30}
+      - {nombre: Puerta dormitorio, x: 8.50, y: 5.30, ancho: 0.80}
+    estancias:
+      - {nombre: Trastero bajo escalera, x: 6.65, y: 4.70, ancho: 1.00, fondo: 4.32, bajo_escalera: true}
+      - {nombre: Baño, x: 0.40, y: 0.40, ancho: 2.00, fondo: 2.00}
+      - {nombre: Salón (chimenea), x: 0.40, y: 6.20, ancho: 5.95, fondo: 2.82}
+      - {nombre: Dormitorio, x: 8.40, y: 5.30, ancho: 3.20, fondo: 3.72}
+      - {nombre: Cocina - comedor, x: 0.40, y: 0.40, ancho: 5.95, fondo: 8.62}
+      - {nombre: Cochera, x: 6.65, y: 0.40, ancho: 5.00, fondo: 8.62}
+    muebles:
+      - {nombre: Ducha 80x120, tipo: ducha, x: 0.45, y: 0.45, ancho: 0.80, fondo: 1.20}
+      - {nombre: WC, tipo: inodoro, x: 1.85, y: 0.45, ancho: 0.40, fondo: 0.70}
+      - {nombre: Lavabo, tipo: lavabo, x: 0.45, y: 1.85, ancho: 0.80, fondo: 0.45}
+      - {nombre: Encimera, tipo: cocina, x: 5.75, y: 3.80, ancho: 0.60, fondo: 2.60}
+      - {nombre: Nevera, tipo: nevera, x: 5.70, y: 6.45, ancho: 0.65, fondo: 0.65}
+      - {nombre: Isla, tipo: cocina, x: 4.20, y: 4.10, ancho: 0.90, fondo: 1.80}
+      - {nombre: Mesa comedor, tipo: mesa, x: 1.60, y: 3.40, ancho: 1.60, fondo: 0.90}
+      - {nombre: Sofá, tipo: sofa, x: 2.40, y: 6.80, ancho: 0.90, fondo: 2.00}
+      - {nombre: Butaca, tipo: sofa, x: 1.10, y: 6.30, ancho: 0.80, fondo: 0.80}
+      - {nombre: Cama 150, tipo: cama, x: 9.50, y: 6.40, ancho: 2.00, fondo: 1.50}
+      - {nombre: Armario, tipo: armario, x: 8.45, y: 6.60, ancho: 0.60, fondo: 2.00}
+      - {nombre: Lavadora, tipo: lavadora, x: 6.75, y: 0.50, ancho: 0.60, fondo: 0.60}
+      - {nombre: Coche, tipo: coche, x: 9.30, y: 0.60, ancho: 1.80, fondo: 4.30}

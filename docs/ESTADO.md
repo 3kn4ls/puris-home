@@ -88,7 +88,7 @@ Cada punto debería confirmarse o corregirse:
 
 ## Propuestas de distribución (paso 3)
 
-El 24/10 Edu pidió al menos 5 propuestas con cochera y 5 sin ella. Todas debían tener un dormitorio de matrimonio con armario, una cocina y un baño con plato de ducha, ser lo más diáfanas posible y no tener pasillos. Se permitía aprovechar el hueco de debajo de la escalera. Están en [`variantes/README.md`](../variantes/README.md), con una tabla comparativa de m², y cada una tiene su `.sh3d`, planos y vista 3D en `variantes/salida/`. Galería para comparar: https://claude.ai/artifact/7svxjR78qA7Gcsaqo2ihX8 **Pendiente: que Edu elija una o varias para seguir trabajando**, y diseñar el primer piso, que sigue diáfano.
+El 24/10 Edu pidió al menos 5 propuestas con cochera y 5 sin ella. Todas debían tener un dormitorio de matrimonio con armario, una cocina y un baño con plato de ducha, ser lo más diáfanas posible y no tener pasillos. Se permitía aprovechar el hueco de debajo de la escalera. Están en [`variantes/README.md`](../variantes/README.md), con una tabla comparativa de m², y cada una tiene su `.sh3d`, planos y vista 3D en `variantes/salida/`. Galería para comparar: https://claude.ai/artifact/7svxjR78qA7Gcsaqo2ihX8 Después, Edu fijó unas **reglas**: salón junto a la chimenea, dormitorio detrás de la cochera con ventana al patio, y cocina, baño y salón en la zona izquierda. Con ellas se hicieron **R1, R2 y R3**, descritas en `variantes/README.md`. **Pendiente: que Edu elija una o varias para seguir trabajando**, y diseñar el primer piso, que sigue diáfano.
 
 ## Próximos pasos
 

@@ -49,20 +49,20 @@ Las superficies de cada estancia están en [`salida/superficies.md`](../salida/s
 
 - Muro central existente de 30 cm en `x = 6,50 m`, que va de la fachada al fondo (posición ajustada por Edu el 24/10).
 - **Zona izquierda (entrada)**: unos 51 m². La puerta al patio está en el muro del fondo de esta zona, cerca del muro central (x = 4,80 m), y es la única puerta exterior trasera. **Chimenea** adosada al muro izquierdo, en la esquina del fondo (unos 0,45 × 1,80 m). Ambas posiciones las marcó Edu el 24/10 y están estimadas sobre el plano.
-- **Cochera** a la derecha: unos 37,7 m² (sin contar la escalera).
-- **Escalera** de 1,00 m de ancho, junto al muro central por el **lado de la cochera**. Va desde la mitad de la casa hasta el muro del fondo y sube hacia el fondo.
+- **Cochera** a la derecha: unos 36,2 m² (sin contar la escalera).
+- **Escalera en L** de 1,00 m de ancho, en el **lado de la cochera** junto al muro central. El primer tramo sube hacia el fondo desde la mitad de la casa (12 peldaños). Le sigue una meseta en la esquina del fondo y un segundo tramo de 6 peldaños que gira a la derecha pegado al muro del fondo. Son 20 peldaños de unos 17 cm con huella de 27 cm. Es un objeto 3D real con sus peldaños y abre automáticamente el hueco en el forjado del primer piso.
 - Fachada: ventanuco, portón izquierdo (2,00 m) y portón de la cochera (2,45 m). Posiciones medidas sobre la foto, aproximadas.
 
 **Primer piso** (altura 3,00 m hasta la cubierta, aprox; forjado de 25 cm):
 
-- Planta diáfana de unos 91 m², sin contar el hueco de la escalera.
+- Planta diáfana de unos 90 m², sin contar el hueco de la escalera.
 - Las dos ventanas pequeñas de la fachada.
 
-Planos renderizados por Sweet Home 3D: [`salida/plano_planta_baja.png`](../salida/plano_planta_baja.png) y [`salida/plano_primer_piso.png`](../salida/plano_primer_piso.png).
+Planos renderizados por Sweet Home 3D: [`salida/plano_planta_baja.png`](../salida/plano_planta_baja.png) y [`salida/plano_primer_piso.png`](../salida/plano_primer_piso.png). Vistas 3D: [`salida/vista_3d.png`](../salida/vista_3d.png) (exterior) y [`salida/vista_3d_planta_baja.png`](../salida/vista_3d_planta_baja.png) (planta baja sin el primer piso, para ver la escalera).
 
 ### Validación
 
-El `.sh3d` generado se ha abierto con el motor de **Sweet Home 3D 7.5** (`tools/ValidarSH3D.java`). Carga sin errores los dos niveles, 11 muros, 6 huecos, las estancias con sus m² y la brújula orientada al norte real. Los PNG de `salida/` son el plano tal y como lo dibuja Sweet Home 3D. No se ha probado la vista 3D en la aplicación de escritorio.
+El `.sh3d` generado se ha abierto con el motor de **Sweet Home 3D 7.5** (`tools/ValidarSH3D.java`). Carga sin errores los dos niveles, 11 muros, 6 huecos, las estancias con sus m² y la brújula orientada al norte real. Los PNG de `salida/` son el plano tal y como lo dibuja Sweet Home 3D. Las vistas 3D se han renderizado con el motor de fotos de Sweet Home 3D (`tools/Render3D.java`); no se han probado en la ventana 3D de la aplicación de escritorio. El archivo incluye una cámara aérea inicial mirando la casa desde la calle.
 
 ## Supuestos y dudas abiertas
 
@@ -77,7 +77,7 @@ Cada punto debería confirmarse o corregirse:
 2. **Lado de la fachada.** Se ha supuesto que la fachada a la calle es el lindero **oeste** de la parcela (vértices 10 → 9 del catastro), porque es el lado recto de unos 12 m. Si fuera el este, se cambia `parcela.fachada` a `[1, 14]` o el par que corresponda.
 3. **Alturas** de planta (3,20 y 3,00 m) y grosor de los muros (40 cm): estimadas.
 4. **Posición del muro central** (`x = 6,50 m`): estimada a partir de la foto y ajustada por Edu, sin medir.
-5. **Escalera**: con unos 4,3 m de recorrido para salvar unos 3,45 m de altura sale muy empinada (unos 21–22 cm por peldaño). Seguramente habrá que alargarla, hacerla en L o moverla. Es una de las primeras cosas a decidir al distribuir.
+5. **Escalera**: ahora es en L, con peldaños cómodos de unos 17 cm. El segundo tramo ocupa 1,6 m del fondo de la cochera; se puede cambiar el reparto de peldaños (`peldanos_tramo1`) o el sentido de giro (`giro`) en `casa.yaml`.
 6. **Pilares**: no se conocen. Se añadirán cuando Edu tenga los datos.
 7. **Cubierta**: no está modelada; el primer piso llega hasta 3,00 m.
 

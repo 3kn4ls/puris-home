@@ -42,6 +42,14 @@ Comprobación opcional con el propio motor de Sweet Home 3D: carga el archivo y 
 java -Djava.awt.headless=true -cp SweetHome3D.jar tools/ValidarSH3D.java salida/casa_purisima.sh3d salida
 ```
 
+Vista 3D renderizada con el motor de fotos de Sweet Home 3D. Usa la carpeta `lib/` de la versión para Linux o de la portable, y en un servidor sin pantalla se lanza con `xvfb-run`:
+
+```bash
+java -Dj3d.rend=noop -cp "SweetHome3D-7.5/lib/*" tools/Render3D.java salida/casa_purisima.sh3d salida/vista_3d.png
+# planta baja sola, vista desde arriba a la derecha:
+java -Dj3d.rend=noop -cp "SweetHome3D-7.5/lib/*" tools/Render3D.java salida/casa_purisima.sh3d salida/vista_3d_planta_baja.png 1100 400 900 2.4 0.75 "Planta baja"
+```
+
 ## Estructura
 
 | Ruta | Contenido |
@@ -50,6 +58,7 @@ java -Djava.awt.headless=true -cp SweetHome3D.jar tools/ValidarSH3D.java salida/
 | `datos/catastro/` | Datos y geometría de la parcela descargados del catastro |
 | `tools/generar_sh3d.py` | Generador `casa.yaml` → `.sh3d` |
 | `tools/ValidarSH3D.java` | Validador y render del plano con Sweet Home 3D |
+| `tools/Render3D.java` | Render 3D (fotos) con Sweet Home 3D |
 | `salida/` | Archivo `.sh3d` generado, planos en PNG y superficies |
 | `docs/ESTADO.md` | Estado del proyecto, supuestos y próximos pasos |
 | `docs/fotos/` | Fotos de la fachada (Google Street View) |

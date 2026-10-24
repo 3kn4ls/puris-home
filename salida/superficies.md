@@ -13,8 +13,8 @@ Generado automáticamente por `tools/generar_sh3d.py` a partir de `casa.yaml`. N
 | Estancia | Superficie útil (m²) |
 |---|---|
 | Zona izquierda (entrada) | 50.2 |
-| Cochera | 37.7 |
-| Escalera (sube hacia el fondo) | 4.3 |
+| Cochera | 36.2 |
+| Escalera en L (20 peldaños de 17.2 cm) | 5.9 |
 | **Superficie útil interior total** | **95.5** |
 | Superficie construida (catastro) | 111.9 |
 | Patio / resto de parcela | 139.3 |
@@ -23,6 +23,6 @@ Generado automáticamente por `tools/generar_sh3d.py` a partir de `casa.yaml`. N
 
 | Estancia | Superficie útil (m²) |
 |---|---|
-| Planta primera diáfana | 91.2 |
+| Planta primera diáfana | 89.7 |
 | **Superficie útil interior total** | **95.5** |
 | Superficie construida (catastro) | 111.9 |

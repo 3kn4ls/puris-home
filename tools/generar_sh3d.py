@@ -123,6 +123,62 @@ f 4 1 5 8
 """
 
 
+def escalera_en_l(e, variables, subida):
+    """Calcula los peldaños de una escalera en L.
+
+    Primer tramo recto hacia el fondo pegado a x, meseta en la esquina del
+    fondo y segundo tramo girando a derecha o izquierda a lo largo del muro
+    del fondo. Devuelve (huella en planta, lista de bloques
+    (x0, y0, x1, y1, cota superior) en metros, recorrido para la flecha).
+    """
+    x = evalua(e["x"], variables)
+    fin = evalua(e["fin"], variables)
+    ancho = evalua(e["ancho"], variables)
+    huella = evalua(e.get("huella", 0.27), variables)
+    n1 = int(e["peldanos_tramo1"])
+    total = round(subida / 0.175)
+    tabica = subida / total
+    signo = 1 if e.get("giro", "derecha") == "derecha" else -1
+    inicio = fin - ancho - (n1 - 1) * huella
+    bloques = []
+    for k in range(1, n1):
+        bloques.append((x, inicio + (k - 1) * huella, x + ancho, inicio + k * huella, k * tabica))
+    bloques.append((x, fin - ancho, x + ancho, fin, n1 * tabica))  # meseta
+    borde = x + ancho if signo > 0 else x
+    for j in range(1, total - n1):
+        a, b = borde + signo * (j - 1) * huella, borde + signo * j * huella
+        bloques.append((min(a, b), fin - ancho, max(a, b), fin, (n1 + j) * tabica))
+    huella_planta = unary_union([box(*b[:4]) for b in bloques])
+    llegada = borde + signo * (total - n1 - 1) * huella
+    recorrido = [(x + ancho / 2, inicio + 0.1), (x + ancho / 2, fin - ancho / 2),
+                 (llegada - signo * 0.1, fin - ancho / 2)]
+    return huella_planta, bloques, recorrido, total, tabica
+
+
+def obj_bloques(bloques, subida):
+    """Modelo OBJ (en cm) con un bloque macizo por peldaño.
+
+    Ejes OBJ de Sweet Home 3D: X = X del plano, Y = altura, Z = Y del plano.
+    Se añade un canto fino a la cota de llegada para que la pieza alcance el
+    forjado superior y Sweet Home 3D recorte el hueco.
+    """
+    lineas = ["# Escalera generada por tools/generar_sh3d.py"]
+    cajas = [(b[0], b[1], b[2], b[3], 0.0, b[4]) for b in bloques]
+    ultimo = bloques[-1]
+    cajas.append((ultimo[0], ultimo[1], ultimo[2], ultimo[3], subida - 0.02, subida + 0.01))
+    for n, (x0, y0, x1, y1, z0, z1) in enumerate(cajas):
+        X0, X1 = x0 * 100, x1 * 100
+        Z0, Z1 = -y1 * 100, -y0 * 100
+        H0, H1 = z0 * 100, z1 * 100
+        for vx, vy, vz in [(X0, H0, Z0), (X1, H0, Z0), (X1, H1, Z0), (X0, H1, Z0),
+                           (X0, H0, Z1), (X1, H0, Z1), (X1, H1, Z1), (X0, H1, Z1)]:
+            lineas.append(f"v {vx:.2f} {vy:.2f} {vz:.2f}")
+        o = n * 8
+        for cara in ((1, 4, 3, 2), (5, 6, 7, 8), (1, 2, 6, 5), (4, 8, 7, 3), (2, 3, 7, 6), (1, 5, 8, 4)):
+            lineas.append("f " + " ".join(str(o + c) for c in cara))
+    return "\n".join(lineas) + "\n"
+
+
 def png_gris(lado=16):
     fila = b"\x00" + b"\x90" * lado
     datos = zlib.compress(fila * lado)
@@ -192,6 +248,7 @@ def generar(ruta_yaml):
 
     h = Home()
     resumen = []
+    modelos = {}
 
     # Brújula: ángulo del norte respecto a "arriba" del plano, en sentido horario.
     norte_x, norte_y = ux[1], uy[1]  # componentes del norte UTM en ejes locales
@@ -204,6 +261,12 @@ def generar(ruta_yaml):
         "longitude": f"{math.radians(centro['lon']):.6f}",
         "latitude": f"{math.radians(centro['lat']):.6f}",
         "timeZone": "Europe/Madrid", "visible": "true"})
+
+    # Vista 3D aérea inicial: desde la calle, elevada, mirando hacia el fondo
+    h.elemento("camera", {
+        "attribute": "topCamera", "lens": "PINHOLE",
+        "x": X(ancho_fachada / 2), "y": Y(-14), "z": "1400",
+        "yaw": f"{math.pi:.4f}", "pitch": f"{math.pi / 5:.4f}", "fieldOfView": "1.0472"})
 
     # Niveles
     elevacion = 0.0
@@ -283,10 +346,23 @@ def generar(ruta_yaml):
         # Escalera de esta planta y hueco de la escalera de la planta inferior
         escalera = None
         if planta.get("escalera"):
-            e = planta["escalera"]
-            ex, ey = evalua(e["x"], variables), evalua(e["y"], variables)
-            ea, el = evalua(e["ancho"], variables), evalua(e["largo"], variables)
-            escalera = box(ex, ey, ex + ea, ey + el)
+            siguiente = conf["plantas"][i + 1]
+            subida = altura + float(siguiente["forjado"])
+            escalera, bloques, recorrido, n_tabicas, tabica = escalera_en_l(
+                planta["escalera"], variables, subida)
+            modelos[f"escalera_{nivel}.obj"] = obj_bloques(bloques, subida)
+            minx, miny, maxx, maxy = escalera.bounds
+            # Hueco en el forjado: contorno de la escalera normalizado a la pieza
+            # (0,0 = esquina trasera izquierda del plano).
+            camino = " ".join(
+                ("M" if k == 0 else "L") + f" {(px - minx) / (maxx - minx):.4f} {(maxy - py) / (maxy - miny):.4f}"
+                for k, (px, py) in enumerate(anillo(escalera))) + " Z"
+            h.elemento("pieceOfFurniture", {
+                "id": h.nuevo_id("escalera"), "level": nivel, "name": "Escalera",
+                "icon": "icono.png", "model": f"escalera_{nivel}.obj",
+                "x": X((minx + maxx) / 2), "y": Y((miny + maxy) / 2), "elevation": "0",
+                "width": cm(maxx - minx), "depth": cm(maxy - miny), "height": cm(subida + 0.01),
+                "color": "FFB0A898", "movable": "false", "staircaseCutOutShape": camino})
         descontar = unary_union([g for g in (escalera, escalera_anterior, *obstaculos) if g is not None])
 
         for est in planta.get("estancias") or []:
@@ -307,15 +383,13 @@ def generar(ruta_yaml):
                 "id": h.nuevo_id("escalera"), "level": nivel, "name": "Escalera",
                 "areaVisible": "false", "floorColor": COLOR_SUELO_ESCALERA},
                 puntos(anillo(escalera)))
-            cx = escalera.centroid.x
-            minx, miny, maxx, maxy = escalera.bounds
             h.elemento("polyline", {
                 "id": h.nuevo_id("subida"), "level": nivel, "thickness": "3",
                 "capStyle": "BUTT", "joinStyle": "MITER", "dashStyle": "SOLID",
                 "startArrowStyle": "NONE", "endArrowStyle": "DELTA",
                 "closedPath": "false", "color": "FF000000"},
-                puntos([(cx, miny + 0.2), (cx, maxy - 0.2)]))
-            resumen.append(f"| Escalera (sube hacia el fondo) | {escalera.area:.1f} |")
+                puntos(recorrido))
+            resumen.append(f"| Escalera en L ({n_tabicas} peldaños de {tabica * 100:.1f} cm) | {escalera.area:.1f} |")
         if escalera_anterior is not None:
             h.elemento("polyline", {
                 "id": h.nuevo_id("hueco-escalera"), "level": nivel, "thickness": "2",
@@ -365,7 +439,7 @@ def generar(ruta_yaml):
            f"<home version='6400' name={quoteattr(Path(conf['salida']).name)} "
            f"selectedLevel={quoteattr(conf['plantas'][0]['id'])} wallHeight='300'>"]
     # Los niveles tienen que ir antes que los elementos que los referencian
-    orden = ["<compass", "<level", "<doorOrWindow", "<wall", "<room", "<polyline", "<dimensionLine", "<label"]
+    orden = ["<camera", "<compass", "<level", "<pieceOfFurniture", "<doorOrWindow", "<wall", "<room", "<polyline", "<dimensionLine", "<label"]
     bloques = []
     actual = None
     for linea in h.lineas:
@@ -384,6 +458,8 @@ def generar(ruta_yaml):
     with zipfile.ZipFile(salida, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("Home.xml", "\n".join(xml) + "\n")
         z.writestr("caja.obj", OBJ_CAJA)
+        for nombre, contenido in modelos.items():
+            z.writestr(nombre, contenido)
         z.writestr("icono.png", png_gris())
 
     cabecera = [

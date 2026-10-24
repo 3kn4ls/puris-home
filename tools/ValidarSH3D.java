@@ -49,6 +49,8 @@ public class ValidarSH3D {
       Dimension tamano = plano.getPreferredSize();
       plano.setSize(tamano);
       BufferedImage imagen = new BufferedImage(tamano.width, tamano.height, BufferedImage.TYPE_INT_RGB);
+      plano.paint(imagen.createGraphics());  // primera pasada: lanza la carga de iconos
+      Thread.sleep(1500);
       Graphics2D g = imagen.createGraphics();
       g.setColor(Color.WHITE);
       g.fillRect(0, 0, tamano.width, tamano.height);

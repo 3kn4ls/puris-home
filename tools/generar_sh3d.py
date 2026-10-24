@@ -179,6 +179,34 @@ def obj_bloques(bloques, subida):
     return "\n".join(lineas) + "\n"
 
 
+def png_escalera(bloques, recorrido):
+    """Icono de planta de la escalera: peldaños y flecha de subida, fondo transparente."""
+    import io
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    huella = unary_union([box(*b[:4]) for b in bloques])
+    minx, miny, maxx, maxy = huella.bounds
+    escala = 100  # píxeles por metro
+    fig = plt.figure(figsize=((maxx - minx) * escala / 100, (maxy - miny) * escala / 100), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_xlim(minx, maxx)
+    ax.set_ylim(miny, maxy)
+    ax.axis("off")
+    for x0, y0, x1, y1, _ in bloques:
+        ax.add_patch(plt.Rectangle((x0, y0), x1 - x0, y1 - y0, facecolor="#f2efe8",
+                                   edgecolor="#333333", linewidth=1.2))
+    xs, ys = zip(*recorrido)
+    ax.plot(xs, ys, color="black", linewidth=1.2)
+    ax.annotate("", xy=recorrido[-1], xytext=recorrido[-2],
+                arrowprops={"arrowstyle": "-|>", "color": "black", "linewidth": 1.2})
+    salida = io.BytesIO()
+    fig.savefig(salida, format="png", transparent=True)
+    plt.close(fig)
+    return salida.getvalue()
+
+
 def png_gris(lado=16):
     fila = b"\x00" + b"\x90" * lado
     datos = zlib.compress(fila * lado)
@@ -351,6 +379,7 @@ def generar(ruta_yaml):
             escalera, bloques, recorrido, n_tabicas, tabica = escalera_en_l(
                 planta["escalera"], variables, subida)
             modelos[f"escalera_{nivel}.obj"] = obj_bloques(bloques, subida)
+            modelos[f"escalera_{nivel}.png"] = png_escalera(bloques, recorrido)
             minx, miny, maxx, maxy = escalera.bounds
             # Hueco en el forjado: contorno de la escalera normalizado a la pieza
             # (0,0 = esquina trasera izquierda del plano).
@@ -359,7 +388,8 @@ def generar(ruta_yaml):
                 for k, (px, py) in enumerate(anillo(escalera))) + " Z"
             h.elemento("pieceOfFurniture", {
                 "id": h.nuevo_id("escalera"), "level": nivel, "name": "Escalera",
-                "icon": "icono.png", "model": f"escalera_{nivel}.obj",
+                "icon": f"escalera_{nivel}.png", "planIcon": f"escalera_{nivel}.png",
+                "model": f"escalera_{nivel}.obj",
                 "x": X((minx + maxx) / 2), "y": Y((miny + maxy) / 2), "elevation": "0",
                 "width": cm(maxx - minx), "depth": cm(maxy - miny), "height": cm(subida + 0.01),
                 "color": "FFB0A898", "movable": "false", "staircaseCutOutShape": camino})

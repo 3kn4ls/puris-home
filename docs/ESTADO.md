@@ -47,10 +47,10 @@ Las superficies de cada estancia están en [`salida/superficies.md`](../salida/s
 
 **Planta baja** (altura 3,20 m, aprox):
 
-- Muro central existente de 30 cm en `x = 6,90 m`, que va de la fachada al fondo.
-- **Zona izquierda (entrada)**: unos 50 m². Al fondo, a la izquierda, tiene la puerta al patio.
-- **Cochera** a la derecha: unos 38,6 m².
-- **Escalera** de 1,00 m de ancho, junto al muro central por el lado izquierdo. Va desde la mitad de la casa hasta el muro del fondo y sube hacia el fondo.
+- Muro central existente de 30 cm en `x = 6,50 m`, que va de la fachada al fondo (posición ajustada por Edu el 24/10).
+- **Zona izquierda (entrada)**: unos 51 m². Al fondo, a la izquierda, tiene la puerta al patio.
+- **Cochera** a la derecha: unos 37,7 m² (sin contar la escalera).
+- **Escalera** de 1,00 m de ancho, junto al muro central por el **lado de la cochera**. Va desde la mitad de la casa hasta el muro del fondo y sube hacia el fondo.
 - Fachada: ventanuco, portón izquierdo (2,00 m) y portón de la cochera (2,45 m). Posiciones medidas sobre la foto, aproximadas.
 
 **Primer piso** (altura 3,00 m hasta la cubierta, aprox; forjado de 25 cm):
@@ -76,7 +76,7 @@ Cada punto debería confirmarse o corregirse:
    Para corregirlo basta con poner el fondo real en `edificio.fondo` de `casa.yaml`, en lugar de `auto`.
 2. **Lado de la fachada.** Se ha supuesto que la fachada a la calle es el lindero **oeste** de la parcela (vértices 10 → 9 del catastro), porque es el lado recto de unos 12 m. Si fuera el este, se cambia `parcela.fachada` a `[1, 14]` o el par que corresponda.
 3. **Alturas** de planta (3,20 y 3,00 m) y grosor de los muros (40 cm): estimadas.
-4. **Posición del muro central** (`x = 6,90 m`): estimada a partir de la foto, entre los dos portones.
+4. **Posición del muro central** (`x = 6,50 m`): estimada a partir de la foto y ajustada por Edu, sin medir.
 5. **Escalera**: con unos 4,3 m de recorrido para salvar unos 3,45 m de altura sale muy empinada (unos 21–22 cm por peldaño). Seguramente habrá que alargarla, hacerla en L o moverla. Es una de las primeras cosas a decidir al distribuir.
 6. **Pilares**: no se conocen. Se añadirán cuando Edu tenga los datos.
 7. **Cubierta**: no está modelada; el primer piso llega hasta 3,00 m.
